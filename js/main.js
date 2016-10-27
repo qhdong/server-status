@@ -12,7 +12,7 @@ $(function () {
         var option = {
             title: {
                 left: 'center',
-                text: `统计样本总数：${status.total}`
+                text: `参与人数：${status.totalUsers}, 样本总数：${status.totalSamples}`
             },
             tooltip: {
                 trigger: 'axis',
@@ -74,7 +74,7 @@ $(function () {
         var users = [],
             counts = [],
             total = 0;
-        data.forEach((curr) => {
+        data.status.forEach((curr) => {
             users.push(curr.username);
             counts.push(curr.count);
             total += parseInt(curr.count);
@@ -82,7 +82,9 @@ $(function () {
         return {
             users: users,
             counts: counts,
-            total: total
+            pinsCount: parseInt(data.pinsCount),
+            totalUsers: total,
+            totalSamples: total * parseInt(data.pinsCount)
         };
     }
 
