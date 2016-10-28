@@ -20,6 +20,10 @@ $(function () {
                 left: 'center',
                 text: `参与人数：${status.totalUsers}, 样本总数：${status.totalSamples}`
             },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
             series: [
               {
                 name: '操作系统',
