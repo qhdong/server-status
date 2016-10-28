@@ -5,6 +5,12 @@ $(function () {
        statusURL: 'http://115.159.83.89:8080/status'
     };
 
+    getStatusFromServer(config.statusURL)
+        .then((status) => {
+            console.log(status);
+            displayStatus(status);
+        });
+
     function displayStatus(status) {
         var myChart = echarts.init(document.getElementById('main'));
 
@@ -14,32 +20,32 @@ $(function () {
                 left: 'center',
                 text: `参与人数：${status.totalUsers}, 样本总数：${status.totalSamples}`
             },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
+            series: [
+              {
+                name: '操作系统',
+                type: 'pie',
+                selectedMode: 'single',
+                radius: [0, '30%'],
+
+                label: {
+                  normal: {
+                    position: 'inner'
+                  }
+                },
+                labelLine: {
+                  normal: {
+                    show: false
+                  }
                 }
+                data: status.osData
             },
-            legend: {
-                data: ['样本数量'],
-                left: 'right'
-            },
-            xAxis: [{
-                type: 'category',
-                data: status.users,
-                axisTick: {
-                    alignWithLabel: true
-                }
-            }],
-            yAxis: [{
-                type: 'value'
-            }],
-            series: [{
-                name: '样本数量',
-                type: 'bar',
-                barWidth: '60%',
-                data: status.counts
-            }]
+            {
+              name: '浏览器',
+              type: 'pie',
+              radius: ['40%', '55%'],
+              data: status.browserData
+          },
+          ]
         };
 
         // 使用刚指定的配置项和数据显示图表。
@@ -71,26 +77,37 @@ $(function () {
     }
 
     function getStatus(data) {
-        var users = [],
-            counts = [],
-            total = 0;
-        data.status.forEach((curr) => {
-            users.push(curr.username);
-            counts.push(curr.count);
-            total += parseInt(curr.count);
+        var totalUsers = 0;
+        var browserData = [];
+        var osData = [];
+
+        data.status.browser.forEach((curr) => {
+          var browser = curr['UAParser.browser'];
+          totalUsers += parseInt(curr.count);
+          if (browser != null) {
+            browserData.push({
+              name: browser.name + '-' + browser.major,
+              value: curr.count
+            });
+          }
         });
+
+        data.status.os.forEach((curr) => {
+          var os = curr['UAParser.os'];
+          if (os != null) {
+            osData.push({
+              name: os.name + '-' + os.version,
+              value: curr.count
+            });
+          }
+        });
+
         return {
-            users: users,
-            counts: counts,
+            totalUsers: totalUsers,
             pinsCount: parseInt(data.pinsCount),
-            totalUsers: total,
-            totalSamples: total * parseInt(data.pinsCount)
+            totalSamples: totalUsers * parseInt(data.pinsCount),
+            browserData: browserData,
+            osData: osData
         };
     }
-
-    getStatusFromServer(config.statusURL)
-        .then((status) => {
-            console.log(status);
-            displayStatus(status);
-        });
 });
