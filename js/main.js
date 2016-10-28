@@ -25,7 +25,7 @@ $(function () {
                 name: '操作系统',
                 type: 'pie',
                 selectedMode: 'single',
-                radius: [0, '30%'],
+                radius: [0, '60%'],
 
                 label: {
                   normal: {
@@ -42,7 +42,7 @@ $(function () {
             {
               name: '浏览器',
               type: 'pie',
-              radius: ['40%', '55%'],
+              radius: ['70%', '80%'],
               data: status.browserData
           },
           ]
