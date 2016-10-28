@@ -36,7 +36,7 @@ $(function () {
                   normal: {
                     show: false
                   }
-                }
+                },
                 data: status.osData
             },
             {
@@ -96,7 +96,7 @@ $(function () {
           var os = curr['UAParser.os'];
           if (os != null) {
             osData.push({
-              name: os.name + '-' + os.version,
+              name: os.name + ' ' + os.version,
               value: curr.count
             });
           }
