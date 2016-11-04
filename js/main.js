@@ -2,7 +2,7 @@ $(function () {
    'use strict';
 
     var config = {
-       statusURL: 'http://115.159.83.89:8080/status'
+       statusURL: 'http://115.159.83.89:1918/status'
     };
 
     getStatusFromServer(config.statusURL)
